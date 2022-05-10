@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <label>1/ Nhập số lượng chữ số : </label><input type="text" id="input_number_index_array">
+    <button type="button" value="Submit" id="submit_create_num_auto">Tạo dãy số tự động</button><br /><br />
+    <label>2/ Nhập dãy số mong muốn : </label><input type="text" id="input_array" style="width: 50%;">
+    <button type="button" value="Submit" id="submit_create_num_manual">Tạo dãy số</button><br /><br />
+    <label>Dãy số trước khi xử lý : </label><label id="array_number">0</label><br /><br />
+    <label>Số ký tự lớn nhất muốn mang vào giữa mảng : </label><input type="text" id="input_number_max"><br /><br />
+    <button type="button" value="Submit" id="submit_sort">Sắp xếp dãy số</button><br /><br />
+    <label>Kết quả : </label><label id="array_number_result">0</label><br /><br />
+    <label>Thời gian : </label><label id="time_result">0</label><br /><br />
+</body>
+
+</html>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#submit_create_num_auto').on('click', function () {
+            var numberArray = $('#input_number_index_array').val();
+            var model = new Object();
+            model.number = numberArray;
+
+            $.ajax({
+                url: "http://localhost:8080/api/random",
+                type: "POST",
+                data: JSON.stringify(model),
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    $('#array_number').text(res);
+                }
+            })
+        });
+
+        $('#submit_create_num_manual').on('click', function () {
+            var numberArray = $('#input_array').val();
+            $('#array_number').text(numberArray);
+        });
+
+        $('#submit_sort').on('click', function () {
+            var array = $('#array_number').text();
+            var number = $('#input_number_max').val();
+            var model = new Object();
+            model.arr = array;
+            model.numberMax = number
+
+            $.ajax({
+                url: "http://localhost:8080/api/sort",
+                type: "POST",
+                data: JSON.stringify(model),
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    $('#array_number_result').text(res.dt);
+                    $('#time_result').text(res.msg);
+                }
+            })
+        });
+
+    });
+</script>
